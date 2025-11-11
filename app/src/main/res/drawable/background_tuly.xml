@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+    <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+        <!-- Cor de fundo -->
+        <item android:drawable="@color/gray_dark"/>
+
+        <!-- Imagem sobre a cor -->
+        <item>
+            <bitmap
+                android:gravity="center"
+                android:src="@drawable/tuly2"
+                android:alpha="200"/>
+        </item>
+    </layer-list>
+
+
+

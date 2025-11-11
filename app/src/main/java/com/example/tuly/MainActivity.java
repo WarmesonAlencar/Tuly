@@ -2,6 +2,8 @@ package com.example.tuly;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.tuly.databinding.ActivityMainBinding;
 
@@ -12,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         // Ativa o binding
         binding = ActivityMainBinding.inflate(getLayoutInflater());
