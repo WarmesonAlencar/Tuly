@@ -26,9 +26,9 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Botão Cadastro → vai para CadastroActivity
+        // Botão Cadastro → vai para RegisterActivity
         binding.btnCadastro.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, CadastroActivity.class);
+            Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
             startActivity(intent);
         });
     }

@@ -60,7 +60,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnCadastrar"
-        android:layout_width="120dp"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:text="@string/cadastrar"

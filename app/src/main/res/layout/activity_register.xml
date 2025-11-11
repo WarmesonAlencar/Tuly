@@ -2,33 +2,53 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
+    android:padding="64dp"
     android:orientation="vertical"
-    android:gravity="center">
+    android:background="@color/gray_dark"
+    >
+
 
     <EditText
         android:id="@+id/edtNome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nome" />
+        android:hint="Nome"
+        android:textColorHint="@color/white" />
 
     <EditText
         android:id="@+id/edtEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="E-mail"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress"
+        android:textColorHint="@color/white" />
 
     <EditText
         android:id="@+id/edtSenha"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Senha"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:textColorHint="@color/white" />
 
-    <Button
-        android:id="@+id/btnCadastrar"
+    <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="14dp"
+        android:orientation="vertical"
+        android:gravity="center">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnCadastrar"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:text="Cadastrar" />
+        android:layout_margin="5dp"
+        android:background="@drawable/background_button_login"
+        android:text="Cadastrar"
+        android:textColor="@color/white"/>
+
+    </LinearLayout>
+
+
+
 </LinearLayout>
