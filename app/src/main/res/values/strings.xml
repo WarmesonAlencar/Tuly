@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Tuly</string>
+    <string name="entrar">Entrar</string>
+    <string name="senha">Senha</string>
+    <string name="usuario">Usuário</string>
+    <string name="cadastrar">Cadastrar</string>
+    <string name="logo_desc">Logo do app</string>
+
+</resources>
