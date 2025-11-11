@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="24dp">
+    android:padding="14dp">
 
     <ImageView
         android:layout_width="231dp"
@@ -32,14 +32,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/entrar"
-        android:layout_marginTop="16dp" />
+        android:layout_margin="10dp" />
 
     <Button
         android:id="@+id/btnCadastrar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/cadastrar"
-        android:layout_marginTop="16dp" />
+        android:layout_margin="10dp" />
 
 </LinearLayout>
 
