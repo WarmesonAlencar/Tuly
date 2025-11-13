@@ -5,7 +5,11 @@
     <color name="purple_ligth">#B12AC7</color>
     <color name="purple_medium">#742397</color>
     <color name="purple_dark">#561461</color>
-    <color name="gray_dark">#110712</color>
+
+    <color name="gray_dark">#000000</color>
+    <color name="muted_text">#999999</color>
+    <color name="btn_blue">#0095F6</color>
+    <color name="btn_dark">#262626</color>
 
 
 </resources>

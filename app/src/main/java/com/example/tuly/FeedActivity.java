@@ -1,40 +1,44 @@
 package com.example.tuly;
 
-import androidx.appcompat.app.AppCompatActivity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.example.tuly.adapters.PostAdapter;
+import com.example.tuly.databinding.ActivityFeedBinding;
+import com.example.tuly.models.Post;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FeedActivity extends AppCompatActivity {
+
+    private ActivityFeedBinding binding;
+    private PostAdapter postAdapter;
+    private List<Post> postList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_feed);
 
-        // Referências aos botões
-        Button btnPerfil = findViewById(R.id.btnPerfil);
-        Button btnSair = findViewById(R.id.btnSair);
+        binding = ActivityFeedBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        // Botão "Ir para Perfil"
-        btnPerfil.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Agora abre a tela ProfileActivity
-                Intent intent = new Intent(FeedActivity.this, ProfileActivity.class);
-                startActivity(intent);
-            }
-        });
+        postList = new ArrayList<>();
+        // TODO: carregar posts do backend ou Firebase
+        // Exemplo dummy:
+        // postList.add(new Post(...));
 
-        // Botão "Sair" (volta para Login)
-        btnSair.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FeedActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish(); // fecha a tela atual
-            }
-        });
+        postAdapter = new PostAdapter(this, postList);
+        binding.recyclerViewPosts.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerViewPosts.setAdapter(postAdapter);
+        binding.recyclerViewPosts.setClipToPadding(false);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }

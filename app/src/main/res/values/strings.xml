@@ -5,5 +5,9 @@
     <string name="usuario">Usuário</string>
     <string name="cadastrar">Cadastrar</string>
     <string name="logo_desc">Logo do app</string>
+    <string name="profile_image_desc">Logo do perfil</string>
+    <string name="placeholder_post">placeholder</string>
+
+
 
 </resources>

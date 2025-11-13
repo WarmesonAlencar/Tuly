@@ -1,17 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_dark">
+    android:background="@color/gray_dark"
+    tools:context=".MainActivity">
 
-    <!-- Imagem de fundo redimensionada -->
-
-    <!-- Conteúdo da tela -->
     <ImageView
         android:layout_width="400dp"
         android:layout_height="290dp"
         android:layout_gravity="center"
         android:scaleType="fitCenter"
-        android:src="@drawable/tuly2" />
+        android:src="@drawable/tuly2"
+        android:contentDescription="@string/logo_desc" />
 
     <LinearLayout
         android:layout_width="match_parent"

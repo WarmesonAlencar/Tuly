@@ -1,52 +1,54 @@
 package com.example.tuly;
 
-
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.content.Intent;
-import android.widget.EditText;
-import android.widget.Toast;
+
+import com.example.tuly.database.DatabaseHelper;
+import com.example.tuly.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText edtEmail, edtSenha;
-    Button btnEntrar, btnCadastrar;
-    DatabaseHelper db;
+    private ActivityLoginBinding binding;
+    private DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         db = new DatabaseHelper(this);
 
-        edtEmail = findViewById(R.id.edtUsuario);
-        edtSenha = findViewById(R.id.edtSenha);
-        btnEntrar = findViewById(R.id.btnEntrar);
-        btnCadastrar = findViewById(R.id.btnCadastrar);
+        binding.btnEntrar.setOnClickListener(v -> {
+            String email = binding.edtUsuario.getText().toString().trim();
+            String senha = binding.edtSenha.getText().toString();
 
-        btnEntrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = edtEmail.getText().toString();
-                String senha = edtSenha.getText().toString();
+            if (email.isEmpty() || senha.isEmpty()) {
+                Toast.makeText(this, "Preencha usuário e senha", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                if (db.verificarLogin(email, senha)) {
-                    Intent intent = new Intent(LoginActivity.this, FeedActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Toast.makeText(LoginActivity.this, "E-mail ou senha inválidos!", Toast.LENGTH_SHORT).show();
-                }
+            boolean ok = db.verificarLogin(email, senha);
+            if (ok) {
+                startActivity(new Intent(this, FeedActivity.class));
+                finish();
+            } else {
+                Toast.makeText(this, "E-mail ou senha inválidos!", Toast.LENGTH_SHORT).show();
             }
         });
 
-        btnCadastrar.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-            startActivity(intent);
+        binding.btnCadastrar.setOnClickListener(v -> {
+            startActivity(new Intent(this, RegisterActivity.class));
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }
