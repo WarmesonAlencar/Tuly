@@ -6,9 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
-import android.util.Log; // Adicionado para logs de erro
+import android.util.Log;
 
-import com.example.tuly.models.User; // Sua classe de modelo completa
+import com.example.tuly.models.User;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -21,7 +21,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_NOME = "nome";
     public static final String COLUMN_EMAIL = "email";
     public static final String COLUMN_SENHA = "senha";
-    // Colunas adicionais necessárias para o seu modelo User
     public static final String COLUMN_USERNAME = "username";
     public static final String COLUMN_BIO = "bio";
     public static final String COLUMN_FOTO_PERFIL = "fotoPerfil";
@@ -32,15 +31,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Tabela atualizada para incluir todas as colunas do seu modelo User
         String CREATE_TABLE = "CREATE TABLE " + TABLE_USERS + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_NOME + " TEXT NOT NULL, " +
                 COLUMN_EMAIL + " TEXT NOT NULL UNIQUE, " +
-                COLUMN_SENHA + " TEXT NOT NULL," +
-                COLUMN_USERNAME + " TEXT DEFAULT ''," +
-                COLUMN_BIO + " TEXT DEFAULT ''," +
-                COLUMN_FOTO_PERFIL + " TEXT DEFAULT '')";
+                COLUMN_SENHA + " TEXT NOT NULL, " +
+                COLUMN_USERNAME + " TEXT DEFAULT '', " +
+                COLUMN_BIO + " TEXT DEFAULT '', " +
+                COLUMN_FOTO_PERFIL + " TEXT DEFAULT ''" +
+                ")";
         db.execSQL(CREATE_TABLE);
     }
 
@@ -50,8 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // --- Métodos de CRUD (Inserir, Existe, Login) ---
-
+    // --- Inserção de usuário ---
     public boolean inserirUsuario(String nome, String email, String senha) {
         if (TextUtils.isEmpty(nome) || TextUtils.isEmpty(email) || TextUtils.isEmpty(senha)) {
             return false;
@@ -61,20 +59,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_NOME, nome);
-        values.put(COLUMN_EMAIL, email);
-        values.put(COLUMN_SENHA, senha); // Em produção, hashear!
-        // Campos adicionais com valores padrão
-        values.put(COLUMN_USERNAME, nome); // Exemplo: usando nome como username inicial
-        values.put(COLUMN_BIO, "");
-        values.put(COLUMN_FOTO_PERFIL, "");
 
-        long result = db.insert(TABLE_USERS, null, values);
+        // Campos principais
+        ContentValues valores = new ContentValues();
+        valores.put(COLUMN_NOME, nome);
+        valores.put(COLUMN_EMAIL, email);
+        valores.put(COLUMN_SENHA, senha); // Em produção, usar hash!
+
+        // Adiciona campos opcionais
+        valores.putAll(criarCamposOpcionais(nome));
+
+        long result = db.insert(TABLE_USERS, null, valores);
         db.close();
         return result != -1;
     }
 
+    // --- Campos opcionais separados ---
+    private ContentValues criarCamposOpcionais(String nome) {
+        ContentValues valores = new ContentValues();
+        valores.put(COLUMN_USERNAME, nome);  // username inicial
+        valores.put(COLUMN_BIO, "");         // bio padrão vazia
+        valores.put(COLUMN_FOTO_PERFIL, ""); // foto padrão vazia
+        return valores;
+    }
+
+    // --- Verifica se usuário existe ---
     public boolean usuarioExiste(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
@@ -82,44 +91,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String[] columns = {COLUMN_ID};
             String selection = COLUMN_EMAIL + " = ?";
             String[] selectionArgs = { email };
-            // Consulta para verificar se existe uma linha com o email
             cursor = db.query(TABLE_USERS, columns, selection, selectionArgs, null, null, null);
-            return (cursor != null && cursor.moveToFirst()); // Retorna true se houver resultado
+            return (cursor != null && cursor.moveToFirst());
         } finally {
             if (cursor != null) cursor.close();
             db.close();
         }
     }
 
-
-
-
-    // **Retorna com.example.tuly.models.User**
+    // --- Retorna usuário por email ---
     public User getUsuarioPorEmail(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
-        User user = null; // Tipo alterado para User
+        User user = null;
 
         try {
-            // Colunas completas
             String[] columns = {
-                    COLUMN_ID, COLUMN_NOME, COLUMN_EMAIL, COLUMN_USERNAME, COLUMN_BIO, COLUMN_FOTO_PERFIL
+                    COLUMN_ID, COLUMN_NOME, COLUMN_EMAIL,
+                    COLUMN_USERNAME, COLUMN_BIO, COLUMN_FOTO_PERFIL
             };
             String selection = COLUMN_EMAIL + " = ?";
             String[] selectionArgs = {email};
 
             cursor = db.query(TABLE_USERS, columns, selection, selectionArgs, null, null, null);
+
             if (cursor != null && cursor.moveToFirst()) {
                 int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
                 String nome = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NOME));
-                String emailUser = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_EMAIL));
-
-                // Extraindo os novos campos
                 String username = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USERNAME));
                 String bio = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BIO));
                 String fotoPerfil = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_FOTO_PERFIL));
 
-                // Cria o objeto User (seu modelo completo)
                 user = new User(id, nome, username, bio, fotoPerfil);
             }
         } catch (IllegalArgumentException e) {
@@ -128,22 +130,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if (cursor != null) cursor.close();
             db.close();
         }
+
         return user;
     }
 
-
-    public boolean atualizarFotoPerfil(int usuarioId, String caminhoFoto) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put(COLUMN_FOTO_PERFIL, caminhoFoto);
-        int linhasAfetadas = db.update(TABLE_USERS, cv, COLUMN_ID + "=?", new String[]{String.valueOf(usuarioId)});
-        db.close();
-        return linhasAfetadas > 0;
-    }
-
-
-
-
+    // --- Retorna usuário por ID ---
     public User getUsuarioPorId(int userId) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
@@ -151,18 +142,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         try {
             String[] columns = {
-                    COLUMN_ID, COLUMN_NOME, COLUMN_EMAIL, COLUMN_USERNAME, COLUMN_BIO, COLUMN_FOTO_PERFIL
+                    COLUMN_ID, COLUMN_NOME, COLUMN_EMAIL,
+                    COLUMN_USERNAME, COLUMN_BIO, COLUMN_FOTO_PERFIL
             };
             String selection = COLUMN_ID + " = ?";
-            String[] selectionArgs = { String.valueOf(userId) }; // Busca por ID
+            String[] selectionArgs = { String.valueOf(userId) };
 
             cursor = db.query(TABLE_USERS, columns, selection, selectionArgs, null, null, null);
 
             if (cursor != null && cursor.moveToFirst()) {
-                // Monta o objeto User
                 int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
                 String nome = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NOME));
-                String emailUser = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_EMAIL));
                 String username = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USERNAME));
                 String bio = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BIO));
                 String fotoPerfil = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_FOTO_PERFIL));
@@ -175,21 +165,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if (cursor != null) cursor.close();
             db.close();
         }
+
         return user;
     }
 
+    // --- Atualizar foto de perfil ---
+    public boolean atualizarFotoPerfil(int usuarioId, String caminhoFoto) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_FOTO_PERFIL, caminhoFoto);
 
-
-    public User getUsuarioLogado() {
-
-
-        return null; // Retorna null se não houver lógica de sessão ou usuário logado.
+        int linhasAfetadas = db.update(TABLE_USERS, cv, COLUMN_ID + "=?", new String[]{String.valueOf(usuarioId)});
+        db.close();
+        return linhasAfetadas > 0;
     }
 
-
+    // --- Verifica login ---
     public boolean verificarLogin(String email, String senha) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
+
         try {
             String[] columns = {COLUMN_ID};
             String selection = COLUMN_EMAIL + " = ? AND " + COLUMN_SENHA + " = ?";
@@ -202,38 +197,53 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    // --- Retorna ID do usuário por email ---
     public int getUsuarioIdPorEmail(String email) {
         int id = -1;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_USERS, new String[]{COLUMN_ID},
-                COLUMN_EMAIL + "=?", new String[]{email}, null, null, null);
+        Cursor cursor = null;
 
-        if (cursor != null && cursor.moveToFirst()) {
-            id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
-            cursor.close();
+        try {
+            cursor = db.query(TABLE_USERS, new String[]{COLUMN_ID},
+                    COLUMN_EMAIL + "=?", new String[]{email}, null, null, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
+            }
+        } finally {
+            if (cursor != null) cursor.close();
+            db.close();
         }
 
-        db.close();
         return id;
     }
 
+    // --- Retorna caminho da foto de perfil ---
     public String getFotoPerfil(int usuarioId) {
         String caminho = null;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_USERS,
-                new String[]{COLUMN_FOTO_PERFIL},
-                COLUMN_ID + "=?",
-                new String[]{String.valueOf(usuarioId)},
-                null, null, null);
+        Cursor cursor = null;
 
-        if (cursor != null && cursor.moveToFirst()) {
-            caminho = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_FOTO_PERFIL));
-            cursor.close();
+        try {
+            cursor = db.query(TABLE_USERS,
+                    new String[]{COLUMN_FOTO_PERFIL},
+                    COLUMN_ID + "=?",
+                    new String[]{String.valueOf(usuarioId)},
+                    null, null, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                caminho = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_FOTO_PERFIL));
+            }
+        } finally {
+            if (cursor != null) cursor.close();
+            db.close();
         }
 
-        db.close();
-        String caminho1 = caminho;
-        return caminho1;
+        return caminho;
     }
 
+    // --- Usuário logado (futuro) ---
+    public User getUsuarioLogado() {
+        return null; // Retornar usuário logado quando implementar sessão
+    }
 }
