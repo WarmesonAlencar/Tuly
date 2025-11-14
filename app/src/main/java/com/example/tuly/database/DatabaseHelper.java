@@ -91,9 +91,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    // ... (usuarioExiste e verificarLogin permanecem os mesmos)
 
-    // 🔹 Método corrigido: busca dados completos de um usuário pelo e-mail
+
+
     // **Retorna com.example.tuly.models.User**
     public User getUsuarioPorEmail(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -131,8 +131,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return user;
     }
 
-    // 🔹 NOVO MÉTODO: Adicionado para buscar por ID (útil para sessão)
-    // 🔹 NOVO MÉTODO: Adicionado para buscar por ID (útil para sessão)
+
+    public boolean atualizarFotoPerfil(int usuarioId, String caminhoFoto) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_FOTO_PERFIL, caminhoFoto);
+        int linhasAfetadas = db.update(TABLE_USERS, cv, COLUMN_ID + "=?", new String[]{String.valueOf(usuarioId)});
+        db.close();
+        return linhasAfetadas > 0;
+    }
+
+
+
+
     public User getUsuarioPorId(int userId) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
@@ -168,7 +179,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    // 🔹 Implementação do método que estava faltando o return (linha 120 aprox.)
+
     public User getUsuarioLogado() {
 
 
@@ -190,4 +201,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.close();
         }
     }
+
+    public int getUsuarioIdPorEmail(String email) {
+        int id = -1;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_USERS, new String[]{COLUMN_ID},
+                COLUMN_EMAIL + "=?", new String[]{email}, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
+            cursor.close();
+        }
+
+        db.close();
+        return id;
+    }
+
+    public String getFotoPerfil(int usuarioId) {
+        String caminho = null;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_USERS,
+                new String[]{COLUMN_FOTO_PERFIL},
+                COLUMN_ID + "=?",
+                new String[]{String.valueOf(usuarioId)},
+                null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            caminho = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_FOTO_PERFIL));
+            cursor.close();
+        }
+
+        db.close();
+        String caminho1 = caminho;
+        return caminho1;
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.example.tuly;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,14 +27,18 @@ public class FeedActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         postList = new ArrayList<>();
-        // TODO: carregar posts do backend ou Firebase
-        // Exemplo dummy:
-        // postList.add(new Post(...));
 
         postAdapter = new PostAdapter(this, postList);
         binding.recyclerViewPosts.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerViewPosts.setAdapter(postAdapter);
         binding.recyclerViewPosts.setClipToPadding(false);
+
+
+        binding.btnSearch.setOnClickListener(v -> {
+            Intent intent = new Intent(FeedActivity.this, ProfileActivity.class);
+            startActivity(intent);
+        });
+
     }
 
     @Override

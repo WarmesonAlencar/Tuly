@@ -26,17 +26,19 @@
             android:id="@+id/edtUsuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/usuario"
+            android:hint="Digite seu e-mail"
             android:inputType="textEmailAddress"
             android:textColor="@color/white"
-            android:textColorHint="@color/white" />
+            android:textColorHint="@color/white"
+            tools:ignore="HardcodedText" />
 
         <EditText
             android:id="@+id/edtSenha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/senha"
+            android:hint="Digite sua senha"
             android:inputType="textPassword"
+            android:textAlignment="textStart"
             android:textColor="@color/white"
             android:textColorHint="@color/white" />
 

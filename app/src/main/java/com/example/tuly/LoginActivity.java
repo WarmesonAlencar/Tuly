@@ -34,6 +34,15 @@ public class LoginActivity extends AppCompatActivity {
 
             boolean ok = db.verificarLogin(email, senha);
             if (ok) {
+
+                int usuarioId = db.getUsuarioIdPorEmail(email);
+
+                getSharedPreferences("APP_PREFS", MODE_PRIVATE)
+                        .edit()
+                        .putInt("usuario_id", usuarioId)
+                        .apply();
+
+
                 startActivity(new Intent(this, FeedActivity.class));
                 finish();
             } else {
