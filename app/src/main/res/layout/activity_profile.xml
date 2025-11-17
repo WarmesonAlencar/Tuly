@@ -3,37 +3,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="center"
-    android:background="@drawable/tuly">
+    android:padding="16dp">
 
+    <!-- Foto de perfil -->
     <ImageView
+        android:id="@+id/imgPerfil"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:src="@drawable/tuly"
-        android:contentDescription="Foto de perfil"
-        android:layout_marginBottom="24dp" />
+        android:src="@mipmap/ic_launcher"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:focusable="true"/>
 
+    <!-- Nome -->
     <TextView
         android:id="@+id/txtNome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nome do Usuário"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp" />
-
-    <TextView
-        android:id="@+id/txtEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Email do Usuário"
-        android:textSize="16sp"
-        android:layout_marginBottom="24dp" />
-
-    <Button
-        android:id="@+id/btnVoltar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Voltar para Home" />
+        android:text="Nome do usuário"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Email -->
+    <TextView
+        android:id="@+id/txtEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="email@exemplo.com"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Contador de posts -->
+    <TextView
+        android:id="@+id/txtContador"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Posts: 0"
+        android:textSize="14sp"
+        android:textColor="@android:color/darker_gray"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Botão voltar -->
+    <Button
+        android:id="@+id/btnVoltar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Voltar"/>
 </LinearLayout>

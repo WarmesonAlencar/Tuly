@@ -2,28 +2,51 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:orientation="vertical"
-    android:padding="24dp">
 
-    <ImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:src="@drawable/tuly"
-        android:layout_marginBottom="40dp"
-        android:contentDescription="Logo do app" />
+    android:paddingTop="35dp"
+    >
 
-    <Button
-        android:id="@+id/btnPerfil"
+
+    <!-- CAMPO PARA ESCREVER O POST -->
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarFeed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ir para Perfil"
-        android:layout_marginBottom="16dp" />
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-    <Button
-        android:id="@+id/btnSair"
+        <ImageView
+            android:id="@+id/btnPerfil"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="end"
+            android:padding="8dp"
+            android:src="@drawable/ic_person" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <EditText
+        android:id="@+id/edtComentario"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sair" />
+        android:layout_marginBottom="8dp"
+        android:background="@android:drawable/edit_text"
+        android:hint="Escreva algo..."
+        android:padding="40dp" />
 
+    <!-- BOTÃO PARA PUBLICAR POST -->
+    <Button
+        android:id="@+id/btnPublicar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Publicar"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- LISTA DE POSTS -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerPosts"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 </LinearLayout>

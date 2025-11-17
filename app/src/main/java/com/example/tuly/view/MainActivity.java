@@ -1,10 +1,10 @@
-package com.example.tuly;
+package com.example.tuly.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.tuly.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {

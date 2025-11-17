@@ -1,4 +1,4 @@
-package com.example.tuly;
+package com.example.tuly.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,7 +9,7 @@ import android.database.Cursor;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "tuly.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 5;
 
     // Nome da tabela e colunas
     public static final String TABLE_USERS = "usuarios";
@@ -18,24 +18,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_EMAIL = "email";
     public static final String COLUMN_SENHA = "senha";
 
+    public static final String COLUMN_FOTO = "fotoUri";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    // Criar a tabela
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "CREATE TABLE " + TABLE_USERS + " ("
+
+        // TABELA DE USUÁRIOS
+        String CREATE_TABLE_USERS = "CREATE TABLE " + TABLE_USERS + " ("
                 + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_NOME + " TEXT, "
-                + COLUMN_EMAIL + " TEXT, "
-                + COLUMN_SENHA + " TEXT)";
-        db.execSQL(CREATE_TABLE);
+                + COLUMN_EMAIL + " TEXT UNIQUE, "
+                + COLUMN_SENHA + " TEXT, "
+                + COLUMN_FOTO + " TEXT)";
+        db.execSQL(CREATE_TABLE_USERS);
+
+        // TABELA DE POSTS
+        String CREATE_POSTS = "CREATE TABLE posts ("
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "userId INTEGER, "
+                + "comentario TEXT, "
+                + "fotoUri TEXT, "
+                + "timestamp INTEGER, "
+                + "FOREIGN KEY(userId) REFERENCES usuarios(id))";
+        db.execSQL(CREATE_POSTS);
     }
 
-    // Atualizar banco se houver mudança de versão
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS posts");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         onCreate(db);
     }
@@ -50,7 +64,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         long result = db.insert(TABLE_USERS, null, values);
         db.close();
-        return result != -1; // retorna true se inseriu
+        return result != -1;
     }
 
     // Verificar login

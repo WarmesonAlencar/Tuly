@@ -1,45 +1,50 @@
-package com.example.tuly;
+package com.example.tuly.view;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class RegisterActivity extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.tuly.presenter.RegisterPresenter;
+import com.example.tuly.R;
+
+public class RegisterActivity extends AppCompatActivity implements RegisterView {
 
     EditText edtNome, edtEmail, edtSenha;
     Button btnCadastrar;
-    DatabaseHelper db;
+    RegisterPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        db = new DatabaseHelper(this);
-
         edtNome = findViewById(R.id.edtNome);
         edtEmail = findViewById(R.id.edtEmail);
         edtSenha = findViewById(R.id.edtSenha);
         btnCadastrar = findViewById(R.id.btnCadastrar);
 
+        presenter = new RegisterPresenter(this, this);
+
         btnCadastrar.setOnClickListener(v -> {
             String nome = edtNome.getText().toString();
             String email = edtEmail.getText().toString();
             String senha = edtSenha.getText().toString();
-
-            if (nome.isEmpty() || email.isEmpty() || senha.isEmpty()) {
-                Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
-            } else {
-                boolean inserido = db.inserirUsuario(nome, email, senha);
-                if (inserido) {
-                    Toast.makeText(this, "Usuário cadastrado!", Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-                    Toast.makeText(this, "Erro ao cadastrar!", Toast.LENGTH_SHORT).show();
-                }
-            }
+            presenter.registerUser(nome, email, senha);
         });
     }
+
+    @Override
+    public void showError(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRegisterSuccess() {
+        Toast.makeText(this, "Usuário cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
+        finish();
+    }
 }
+
