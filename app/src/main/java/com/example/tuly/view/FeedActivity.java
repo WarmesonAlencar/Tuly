@@ -21,11 +21,13 @@ import java.util.List;
 
 public class FeedActivity extends AppCompatActivity implements FeedView {
 
-    EditText edtComentario;
-    Button btnPublicar;
-    RecyclerView recyclerPosts;
-    FeedPresenter presenter;
-    PostAdapter adapter;
+    private EditText edtComentario;
+    private Button btnPublicar;
+    private RecyclerView recyclerPosts;
+    private FeedPresenter presenter;
+    private PostAdapter adapter;
+
+    private String selectedImageUri = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,16 +38,22 @@ public class FeedActivity extends AppCompatActivity implements FeedView {
         btnPublicar = findViewById(R.id.btnPublicar);
         recyclerPosts = findViewById(R.id.recyclerPosts);
         ImageView btnPerfil = findViewById(R.id.btnPerfil);
+        ImageView btnAdicionarFoto = findViewById(R.id.btnAdicionarFoto);
 
         recyclerPosts.setLayoutManager(new LinearLayoutManager(this));
 
         presenter = new FeedPresenter(this, this);
         presenter.loadPosts();
 
+        if (btnAdicionarFoto != null) {
+            btnAdicionarFoto.setOnClickListener(v -> showImageOptions());
+        }
+
         btnPublicar.setOnClickListener(v -> {
             String comentario = edtComentario.getText().toString();
-            String fotoUri = ""; // implementar depois com câmera/galeria
-            presenter.publishPost(comentario, fotoUri);
+
+            presenter.publishPost(comentario, selectedImageUri);
+            selectedImageUri = "";
         });
 
         btnPerfil.setOnClickListener(v -> {
@@ -55,15 +63,43 @@ public class FeedActivity extends AppCompatActivity implements FeedView {
     }
 
 
+    private void showImageOptions() {
+        String[] options = {"Camera", "Gallery"};
+
+        new android.app.AlertDialog.Builder(this)
+                .setTitle("Choose image source")
+                .setItems(options, (dialog, which) -> {
+                    if (which == 0) {
+                        ImageUtils.openCamera(this);
+                    } else {
+                        ImageUtils.openGallery(this);
+                    }
+                })
+                .show();
+    }
+
+
+
+
     // Receber resultado
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Uri imageUri = ImageUtils.handleActivityResult(requestCode, resultCode, data);
-        if (imageUri != null) {
-            Toast.makeText(this, "Imagem selecionada: " + imageUri.toString(), Toast.LENGTH_SHORT).show();
-            // Aqui você pode salvar no banco ou mostrar na tela
+        // -------- GALLERY RESULT --------
+        Uri galleryUri = ImageUtils.handleGalleryResult(this, requestCode, resultCode, data);
+        if (galleryUri != null) {
+            selectedImageUri = galleryUri.toString();
+            Toast.makeText(this, "Image selected.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // -------- CAMERA RESULT (FUTURE) --------
+        Uri cameraUri = ImageUtils.handleCameraResult(requestCode, resultCode);
+
+        if (cameraUri != null) {
+            selectedImageUri = cameraUri.toString();
+            Toast.makeText(this, "Image captured.", Toast.LENGTH_SHORT).show();
         }
     }
 

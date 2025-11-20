@@ -9,7 +9,7 @@ import android.database.Cursor;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "tuly.db";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     // Nome da tabela e colunas
     public static final String TABLE_USERS = "usuarios";
@@ -78,4 +78,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return existe;
     }
+
+
+
+
+    public String getFotoPerfil(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + COLUMN_FOTO + " FROM " + TABLE_USERS + " WHERE id=?",
+                new String[]{String.valueOf(userId)});
+
+        String foto = null;
+        if (cursor.moveToFirst()) {
+            foto = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_FOTO));
+        }
+
+        cursor.close();
+        return foto;
+    }
+
+
 }

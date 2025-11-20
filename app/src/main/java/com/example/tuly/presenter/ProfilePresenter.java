@@ -22,35 +22,60 @@ public class ProfilePresenter {
         this.session = new SessionManager(context);
     }
 
-    // Carregar os dados do perfil do usuário
+    // Load initial user data
     public void loadProfileData() {
         int userId = session.getUserId();
 
         User user = userDAO.getUserById(userId);
         if (user == null) {
-            view.showError("Erro ao carregar dados do usuário.");
+            view.showError("Error loading user data.");
             return;
         }
 
         int postCount = postDAO.getPostCountByUser(userId);
+        String photoUri = user.getFotoUri();
 
-        // FOTO DO USUÁRIO (pode estar null)
-        String fotoUri = user.getFotoUri();
-
-        // Enviar dados completos
-        view.showUserData(user.getNome(), user.getEmail(), postCount, fotoUri);
+        view.showUserData(user.getNome(), user.getEmail(), postCount, photoUri);
     }
 
-    // Atualizar foto do perfil
-    public void updateProfilePhoto(String fotoUri) {
+    // ===========================
+    // GALLERY FLOW (NEW)
+    // ===========================
+    public void onGalleryPhotoSelected(String uri) {
         int userId = session.getUserId();
 
-        boolean sucesso = userDAO.updateProfilePhoto(userId, fotoUri);
+        boolean success = userDAO.updateProfilePhoto(userId, uri);
 
-        if (sucesso) {
+        if (success) {
+            // Show updated photo immediately
+            view.showPhoto(uri);
+
+            // Feedback
+            view.showMessage("Foto Atualizada!");
+
+            // Keep your original method call
             view.onPhotoUpdated();
+
         } else {
-            view.showError("Erro ao atualizar foto.");
+            view.showError("Erro ao atualizar a Foto");
         }
     }
+
+    // ===========================
+    // CAMERA FLOW (FUTURE)
+    // ===========================
+    public void onCameraPhotoTaken(String uri) {
+        int userId = session.getUserId();
+
+        boolean success = userDAO.updateProfilePhoto(userId, uri);
+
+        if (success) {
+            view.showPhoto(uri);
+            view.showMessage("Foto tirada e salva!");
+            view.onPhotoUpdated();
+        } else {
+            view.showError("Erro ao salvar foto da câmera");
+        }
+    }
+
 }

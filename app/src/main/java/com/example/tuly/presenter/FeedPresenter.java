@@ -30,10 +30,12 @@ public class FeedPresenter {
     // publicar post
     public void publishPost(String comentario, String fotoUri) {
 
-        if (comentario == null || comentario.trim().isEmpty()) {
-            view.showMessage("Digite um comentário!");
+
+        if ((comentario == null || comentario.trim().isEmpty()) && (fotoUri == null || fotoUri.trim().isEmpty())) {
+            view.showMessage("Digite um comentário ou selecione uma foto!");
             return;
         }
+
 
         int userId = session.getUserId();
 

@@ -25,3 +25,8 @@ public class User {
     public String getFotoUri() { return fotoUri; }
     public void setFotoUri(String uri) { this.fotoUri = uri; }
 }
+
+
+
+
+

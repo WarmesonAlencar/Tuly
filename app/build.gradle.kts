@@ -31,13 +31,14 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-    // ✅ Adicione este bloco para habilitar o View Binding
+
     buildFeatures {
         viewBinding = true
     }
 }
 
 dependencies {
+    implementation(libs.glide)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

@@ -8,21 +8,24 @@ public class Post {
     private String fotoUri;
     private long timestamp;
 
-    // Novos campos
+    // NOVOS CAMPOS (vindos do JOIN):
     private String nomeUsuario;
     private String fotoPerfilUri;
 
     public Post() {}
 
-    public Post(int id, int userId, String comentario, String fotoUri, long timestamp) {
+    public Post(int id, int userId, String comentario, String fotoUri, long timestamp,
+                String nomeUsuario, String fotoPerfilUri) {
         this.id = id;
         this.userId = userId;
         this.comentario = comentario;
         this.fotoUri = fotoUri;
         this.timestamp = timestamp;
+        this.nomeUsuario = nomeUsuario;
+        this.fotoPerfilUri = fotoPerfilUri;
     }
 
-    // GETTERS e SETTERS
+    // Getters
     public int getId() { return id; }
     public int getUserId() { return userId; }
     public String getComentario() { return comentario; }
@@ -31,11 +34,7 @@ public class Post {
     public String getNomeUsuario() { return nomeUsuario; }
     public String getFotoPerfilUri() { return fotoPerfilUri; }
 
-    public void setId(int id) { this.id = id; }
-    public void setUserId(int userId) { this.userId = userId; }
-    public void setComentario(String comentario) { this.comentario = comentario; }
-    public void setFotoUri(String fotoUri) { this.fotoUri = fotoUri; }
-    public void setTimestamp(long timestamp) { this.timestamp = timestamp; }
+    // Setters
     public void setNomeUsuario(String nomeUsuario) { this.nomeUsuario = nomeUsuario; }
     public void setFotoPerfilUri(String fotoPerfilUri) { this.fotoPerfilUri = fotoPerfilUri; }
 }

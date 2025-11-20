@@ -1,55 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:background="#000000"
+    android:fillViewport="true">
 
-    <!-- Foto de perfil -->
-    <ImageView
-        android:id="@+id/imgPerfil"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:src="@mipmap/ic_launcher"
-        android:layout_gravity="center"
-        android:scaleType="centerCrop"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:focusable="true"/>
-
-    <!-- Nome -->
-    <TextView
-        android:id="@+id/txtNome"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nome do usuário"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp"/>
+        android:padding="16dp">
 
-    <!-- Email -->
-    <TextView
-        android:id="@+id/txtEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="email@exemplo.com"
-        android:textSize="16sp"
-        android:layout_marginBottom="8dp"/>
+        <!-- Botão Voltar -->
 
-    <!-- Contador de posts -->
-    <TextView
-        android:id="@+id/txtContador"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Posts: 0"
-        android:textSize="14sp"
-        android:textColor="@android:color/darker_gray"
-        android:layout_marginBottom="16dp"/>
+        <!-- FOTO PERFIL -->
+        <Button
+            android:id="@+id/btnVoltar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="56dp"
+            android:text="Feed"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Botão voltar -->
-    <Button
-        android:id="@+id/btnVoltar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Voltar"/>
-</LinearLayout>
+        <ImageView
+            android:id="@+id/imgPerfil"
+            android:layout_width="97dp"
+            android:layout_height="95dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/circle_mask"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_person_white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnVoltar" />
+
+        <!-- CONTADOR DE POSTS -->
+        <LinearLayout
+            android:id="@+id/boxPosts"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            app:layout_constraintStart_toEndOf="@id/imgPerfil"
+            app:layout_constraintTop_toTopOf="@id/imgPerfil"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/txtContador"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Posts"
+                android:textColor="#CCCCCC"
+                android:textSize="12sp"/>
+        </LinearLayout>
+
+        <!-- NOME -->
+        <TextView
+            android:id="@+id/txtNome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Nome do Usuário"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/imgPerfil"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"/>
+
+        <!-- EMAIL -->
+        <TextView
+            android:id="@+id/txtEmail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="email@exemplo.com"
+            android:textColor="#DDDDDD"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/txtNome"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="6dp"/>
+
+        <!-- BIO DO USUÁRIO (OPCIONAL) -->
+        <TextView
+            android:id="@+id/txtBio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Minha biografia aqui…"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            app:layout_constraintTop_toBottomOf="@id/txtEmail"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="10dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

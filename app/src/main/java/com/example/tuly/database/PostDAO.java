@@ -33,15 +33,13 @@ public class PostDAO {
     public List<Post> getAllPosts() {
         List<Post> posts = new ArrayList<>();
 
-        Cursor cursor = db.rawQuery(
-                "SELECT p.id, p.userId, p.comentario, p.fotoUri, p.timestamp, " +
-                        "u.nome AS nomeUsuario, u.fotoPerfil AS fotoPerfilUri " +
-                        "FROM posts p " +
-                        "JOIN usuarios u ON u.id = p.userId " +
-                        "ORDER BY p.id DESC",
-                null
-        );
+        String sql = "SELECT p.id, p.userId, p.comentario, p.fotoUri, p.timestamp, " +
+                "u.nome AS nomeUsuario, u.fotoUri AS fotoPerfilUri " +
+                "FROM posts p " +
+                "INNER JOIN usuarios u ON u.id = p.userId " +
+                "ORDER BY p.id DESC";
 
+        Cursor cursor = db.rawQuery(sql, null);
 
         if (cursor.moveToFirst()) {
             do {
@@ -54,19 +52,23 @@ public class PostDAO {
                 String nomeUsuario = cursor.getString(cursor.getColumnIndexOrThrow("nomeUsuario"));
                 String fotoPerfilUri = cursor.getString(cursor.getColumnIndexOrThrow("fotoPerfilUri"));
 
-                Post post = new Post(id, userId, comentario, fotoUri, timestamp);
-                post.setNomeUsuario(nomeUsuario);
-                post.setFotoPerfilUri(fotoPerfilUri);
-
-                posts.add(post);
+                posts.add(new Post(
+                        id,
+                        userId,
+                        comentario,
+                        fotoUri,
+                        timestamp,
+                        nomeUsuario,
+                        fotoPerfilUri
+                ));
 
             } while (cursor.moveToNext());
         }
 
-
         cursor.close();
         return posts;
     }
+
 
     public int getPostCountByUser(int userId) {
         Cursor cursor = db.rawQuery(
